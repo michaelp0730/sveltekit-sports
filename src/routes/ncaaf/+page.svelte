@@ -1,11 +1,16 @@
-<script>
+<script lang="ts">
     import { onMount } from 'svelte';
     import dayjs from 'dayjs';
+    import type { FootballScoreboard } from '../../types/Espn/FootballScoreboard';
 
-    let response = {};
-    let uniqueDates = [];
-    let selectedDate = '';
-    let filteredGames = [];
+    let response: FootballScoreboard = {
+        season: { year: 2024, slug: '', type: 0, },
+        week: { number: 1 },
+        events: [],
+    };
+    let uniqueDates: string[] = [];
+    let selectedDate: string = '';
+    let filteredGames: any[] = [];
 
     onMount(async () => {
         const res = await fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard');
@@ -13,21 +18,21 @@
         console.log('response: ', response);
 
         // Extract unique dates
-        const datesSet = new Set(response.events.map(evt => dayjs(evt.date).format('YYYY-MM-DD')));
+        const datesSet: Set<string> = new Set(response.events.map(evt => dayjs(evt.date).format('YYYY-MM-DD')));
         uniqueDates = Array.from(datesSet);
 
         // Initially display all games
         filteredGames = response.events;
     });
 
-    function parseDate(utcString) {
+    function parseDate(utcString: string) {
         return dayjs(utcString).format('MMMM D, YYYY h:mm A');
     }
 
     function filterGames() {
         if (selectedDate) {
-            filteredGames = response.events.filter(event =>
-                dayjs(event.date).format('YYYY-MM-DD') === selectedDate
+            filteredGames = response.events.filter(evt =>
+                dayjs(evt.date).format('YYYY-MM-DD') === selectedDate
             );
         } else {
             filteredGames = response.events;
