@@ -7,11 +7,6 @@
 </script>
 
 <style>
-    h1 {
-        color: blue;
-        font-size: 24px;
-    }
-
     .prediction-container {
         background-color: #f0f0f0;
         padding: 20px;
