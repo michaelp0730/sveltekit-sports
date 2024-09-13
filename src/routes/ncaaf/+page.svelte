@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import dayjs from 'dayjs';
-    import type { FootballScoreboard } from '../../types/Espn/FootballScoreboard';
+    import type { FootballEvent, FootballScoreboard } from '../../types/Espn/FootballScoreboard';
 
     let response: FootballScoreboard = {
         season: { year: 2024, slug: '', type: 0, },
@@ -10,7 +10,7 @@
     };
     let uniqueDates: string[] = [];
     let selectedDate: string = '';
-    let filteredGames: any[] = [];
+    let filteredGames: FootballEvent[] = [];
 
     onMount(async () => {
         const res = await fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard');
@@ -55,6 +55,9 @@
             <div style="border: 1px solid #ccc; margin-top: 20px; padding: 10px;">
                 <h2>{game.name}</h2>
                 <p>{parseDate(game.date)}</p>
+                <p>
+                    <a href={`/ncaaf/events/${game.id}`}>Prediction</a>
+                </p>
                 <p>Links</p>
                 <ul>
                     {#each game.links as link}
